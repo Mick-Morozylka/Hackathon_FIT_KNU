@@ -1,0 +1,36 @@
+#6
+SELECT COUNT(order_id)/365
+FROM orders
+WHERE date BETWEEN '2015-01-01' AND '2015-12-31'
+
+#7
+SELECT AVG(quantity) AS avg_pizzas_per_order
+FROM order_details
+LEFT JOIN orders 
+ON order_details.order_id = orders.order_id
+WHERE date BETWEEN '2015-09-01' AND '2015-11-30'
+
+#8
+SELECT p.name, SUM(od.quantity * p.price) AS revenue
+FROM orders o
+JOIN order_details od 
+ON o.order_id = od.order_id
+JOIN pizza p 
+ON od.pizza_id = p.pizza_id
+JOIN pizza_types pt
+ON pt.pizza_type_id = p.pizza_type_id
+WHERE o.date BETWEEN '2015-06-01' AND '2015-06-30'
+GROUP BY p.name
+ORDER BY revenue DESC
+LIMIT 3;
+
+#9
+SELECT pt.name AS category, p.size, SUM(od.quantity) AS total_quantity
+FROM orders o
+JOIN order_details od 
+ON o.id = od.order_id
+JOIN pizza p 
+ON od.pizza_id = p.id
+JOIN pizza_types pt 
+ON p.type_id = pt.id
+GROUP BY pt.name, p.size;
